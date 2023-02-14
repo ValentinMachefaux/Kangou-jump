@@ -9,25 +9,24 @@ function Character(left,bottom) {
     this.initial_pos_y = bottom - this.height;
     this.stopped = false;
 }
-
 Character.prototype = {
     file: "assets/hero/run/run.png",
     width: 65,
     height: 60,
     // Recuperation des frames en selectionnant la position sur l'image
     frames: [
-        {top: 150,left: 25},
-        {top: 272,left: 28},
-        {top: 392,left: 28},
-        {top: 512,left: 27},
-        {top: 628,left: 19},
-        {top: 751,left: 24},
-        {top: 875,left: 25},
-        {top: 994,left: 28},
-        {top: 1111,left: 28},
-        {top: 1229,left: 27},
-        {top: 1351,left: 18},
-        {top: 1468,left: 18},
+        {left: 150,top: 25},
+        {left: 272,top: 28},
+        {left: 392,top: 28},
+        {left: 512,top: 27},
+        {left: 628,top: 19},
+        {left: 751,top: 24},
+        {left: 875,top: 25},
+        {left: 994,top: 28},
+        {left: 1111,top: 28},
+        {left: 1229,top: 27},
+        {left: 1351,top: 18},
+        {left: 1468,top: 18},
     ],
     jump_freeze_frame: 7,
     jump_step: function() {
@@ -40,6 +39,7 @@ Character.prototype = {
         if (!this.jumping && !this.stopped) {
             this.jumping = true
             this.jump_ascending = true
+            console.log("start jump");
         }
     },
     // Fonction qui stop le saut
@@ -75,6 +75,8 @@ Character.prototype = {
     draw_on: function (ctx) {
         let frame = this.frames[this.current_frame]
         ctx.drawImage(this.image,frame.left,frame.top,this.width,this.height,this.pos_x | 0,this.pos_y | 0, this.width,this.height)
+        // console.log(frame);
+        console.dir(this.image);
     },
     // Fonction qui rectifie la collision
     collision_rect: function () {
@@ -91,5 +93,4 @@ Character.prototype = {
     restart: function () {
         this.stopped = false
     }
-
 }

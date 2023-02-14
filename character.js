@@ -36,14 +36,14 @@ Character.prototype = {
     gravity: 5,
     jump_max_height: 110,
     // Fonction pour lancer le saut
-    startJump: function() {
+    start_jump: function() {
         if (!this.jumping && !this.stopped) {
             this.jumping = true
             this.jump_ascending = true
         }
     },
     // Fonction qui stop le saut
-    endJump: function() {
+    end_jump: function() {
         if (this.jumping) {
             this.jump_ascending = false
         }
@@ -71,11 +71,13 @@ Character.prototype = {
         }
         this.pos_y = this.initial_pos_y * this.jump_height
     },
-    drawOn: function (ctx) {
+    // Fonction qui dessine la frame
+    draw_on: function (ctx) {
         let frame = this.frames[this.current_frame]
         ctx.drawImage(this.image,frame.left,frame.top,this.width,this.height,this.pos_x | 0,this.pos_y | 0, this.width,this.height)
     },
-    collisionRect: function () {
+    // Fonction qui rectifie la collision
+    collision_rect: function () {
         return {
             x: (this.pos_x|0) +35,
             y: pos_y|0,

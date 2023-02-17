@@ -5,14 +5,18 @@ function Character(left,bottom) {
     this.jumping = false;
     this.jump_height = 0;
     this.jump_ascending;
+    this.rolling = false;
+    this.roll_height = 0;
+    this.roll_desc;
     this.pos_x = left;
     this.initial_pos_y = bottom - this.height;
     this.stopped = false;
+    this.token = true
 }
 Character.prototype = {
     file: "assets/hero/run/run.png",
-    width: 65,
-    height: 60,
+    width: 75,
+    height: 75,
     // Recuperation des frames en selectionnant la position sur l'image
     frames: [
         {left: 150,top: 25},
@@ -28,24 +32,41 @@ Character.prototype = {
         {left: 1351,top: 18},
         {left: 1468,top: 18},
     ],
-    jump_freeze_frame: 7,
+    jump_freeze_frame: 4,
     jump_step: function() {
-        return (this.jump_max_height * 1.5 - this.jump_height) * 0.15;
+        return (this.jump_max_height * 1.5 - this.jump_height) * 0.3;
     },
-    gravity: 5,
-    jump_max_height: 110,
+    roll_freeze_frame: 2,
+    roll_step: function() {
+        return (this.roll_max_height *1.5 - this.roll_height) * 0.3;
+    },
+    gravity: 8,
+    jump_max_height: 150,
+    roll_max_height: 60,
     // Fonction pour lancer le saut
     start_jump: function() {
         if (!this.jumping && !this.stopped) {
-            this.jumping = true
-            this.jump_ascending = true
-            console.log("start jump");
+            this.jumping = true;
+            this.jump_ascending = true;
         }
     },
     // Fonction qui stop le saut
     end_jump: function() {
         if (this.jumping) {
-            this.jump_ascending = false
+            this.jump_ascending = false;
+        }
+    },
+    // Fonction pour lancer le roll
+    start_roll: function() {
+        if (!this.rolling && !this.stopped) {
+            this.rolling = true;
+            this.roll_desc = true;
+        }
+    },
+    // Fonction pour stopper le roll
+    end_roll: function() {
+        if (this.rolling) {
+            this.roll_desc = false;
         }
     },
     // Fonction qui vas gerer le saut et l'update
@@ -53,44 +74,68 @@ Character.prototype = {
         if (!this.stopped) {
             if (this.jumping) {
                 this.current_frame = this.jump_freeze_frame;
-                if (this.jump_height < this.jump_max_height) {
-                    this.jump_height += this.jump_step();
-                } else {
-                    this.jump_ascending = false
+                if (this.jump_ascending) {
+                    if (this.jump_height < this.jump_max_height) {
+                        this.jump_height += this.jump_step();
+                        console.log(this.pos_y);
+                        this.token = true
+                    } else {
+                        this.jump_ascending = false;
+                    }
+                }
+            } else 
+            if (this.rolling) {
+                this.current_frame = this.roll_freeze_frame;
+                if (this.roll_desc) {
+                    if (this.roll_height < this.roll_max_height) {
+                        this.roll_height += this.roll_step();
+                        console.log(this.pos_y);
+                        this.token = false
+                    } else {
+                        this.roll_desc = false;
+                    }
                 }
             } else {
-                this.current_frame = (this.current_frame + 1) % this.frames.length
+                this.current_frame = (this.current_frame + 1) % this.frames.length;
             }
         } else {
-            this.current_frame = 4
+            this.current_frame = 4;
         }
-        this.jump_height -= this.gravity
+        this.jump_height -= this.gravity*2;
         if (this.jump_height < 0) {
-            this.jumping = false
-            this.jump_height = 0
+            this.jumping = false;
+            this.jump_height = 0;
         }
-        this.pos_y = this.initial_pos_y * this.jump_height
+        this.roll_height -= this.gravity;
+        if (this.roll_height < 0) {
+            this.rolling = false;
+            this.roll_height = 0;
+        }
+        if (this.token) {
+            this.pos_y = this.initial_pos_y - this.jump_height;
+        } else {
+            this.pos_y = this.initial_pos_y + this.roll_height;
+        }
+            
     },
     // Fonction qui dessine la frame
-    draw_on: function (ctx) {
-        let frame = this.frames[this.current_frame]
-        ctx.drawImage(this.image,frame.left,frame.top,this.width,this.height,this.pos_x | 0,this.pos_y | 0, this.width,this.height)
-        // console.log(frame);
-        console.dir(this.image);
+    draw_on: function(ctx) {
+        let frame = this.frames[this.current_frame];
+        ctx.drawImage(this.image, frame.left, frame.top, this.width, this.height, this.pos_x | 0, this.pos_y | 0, this.width, this.height);
     },
-    // Fonction qui rectifie la collision
-    collision_rect: function () {
+    // Fonction qui cree la collision box du perso ?
+    collision_rect: function() {
         return {
-            x: (this.pos_x|0) +35,
-            y: pos_y|0,
-            width: this.width-35,
-            height: this.height -10
-        }
+            x: (this.pos_x | 0) + 35,
+            y: this.pos_y | 0,
+            width: this.width - 35,
+            height: this.height - 10
+        };
     },
-    stop:function () {
-        this.stopped = true
+    stop: function() {
+        this.stopped = true;
     },
-    restart: function () {
-        this.stopped = false
+    restart: function() {
+        this.stopped = false;
     }
 }

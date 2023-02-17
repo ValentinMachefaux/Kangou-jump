@@ -1,4 +1,3 @@
-// import * as Character from "character.js";
 let canvas = document.createElement("canvas")
 let ctx = canvas.getContext("2d")
 
@@ -39,9 +38,9 @@ function new_game() {
                 case 38: // touche flechee haut
                     character.start_jump()
                     break;
-                // case 40: // touche flechee bas
-                //     Character.startRoll()
-                //     break;
+                case 40: // touche flechee bas
+                    character.start_roll()
+                    break;
                 case 27: // touche echap
                     paused = !paused
                     console.log("pause");
@@ -52,9 +51,14 @@ function new_game() {
     document.addEventListener("keydown", key_down_listener);
 
     function key_up_listener(e) {
+        
         key_pressed[e.keyCode] = false
+
         if (e.keyCode == 32 || e.keyCode == 38) {
             character.end_jump()
+        }
+        if (e.keyCode == 40) {
+            character.end_roll()
         }
     }
     document.addEventListener("keyup", key_up_listener);
@@ -66,23 +70,25 @@ function new_game() {
         setTimeout(update,50)
     })();
 
-    (function updateBackground() {
-        if (!game_over && !win && !paused) {
-            updateGroundAndBackTrees(difficulty)
-            updateForeTrees(difficulty)
-            if (difficulty < 1) {
-                difficulty += 0.0001
-            }
-        }
-        setTimeout(updateBackground,20)
-    })();
+    // (function updateBackground() {
+    //     if (!game_over && !win && !paused) {
+    //         updateGroundAndBackTrees(difficulty)
+    //         updateForeTrees(difficulty)
+    //         if (difficulty < 1) {
+    //             difficulty += 0.0001
+    //         }
+    //     }
+    //     setTimeout(updateBackground,20)
+    // })();
 
     (function draw() {
+        ctx.fillStyle = '#81738e';
         ctx.fillRect(0,0,canvas.width,canvas.height)
 
-        drawGroundAndBackTrees(ctx)
+        //drawGroundAndBackTrees(ctx)
         character.draw_on(ctx)
-        drawForeTrees(ctx)
+        //drawForeTrees(ctx)
+        ctx.fillStyle = 'white';
 
 
         setTimeout(draw, 1000/60)
@@ -91,8 +97,8 @@ function new_game() {
 
 (function check_loaded() {
     if (document.readyState === "complete") {
-        prepareBackground(canvas.width,canvas.height)
-        prepareTrees()
+        //prepareBackground(canvas.width,canvas.height)
+        // prepareTrees()
         new_game()
     } else {
         setTimeout(check_loaded,100)

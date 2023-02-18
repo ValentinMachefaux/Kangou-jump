@@ -122,7 +122,6 @@ Character.prototype = {
     draw_on: function(ctx) {
         let frame = this.frames[this.current_frame];
         ctx.drawImage(this.image, frame.left, frame.top, this.width, this.height, this.pos_x | 0, this.pos_y | 0, this.width, this.height);
-        console.log("Character Y", this.pos_y, "\nCharacter X", this.pos_x);
     },
     // Fonction qui cree la collision box du perso ?
     collision_rect: function() {

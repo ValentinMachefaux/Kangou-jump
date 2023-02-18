@@ -17,7 +17,9 @@ function new_game() {
     const ground_pos_y = canvas.height - ground_height
     
     let character = new Character(100,ground_pos_y)
-    let block_bot = []
+    let blocks = []
+    let up_bot = Math.round(Math.random())
+
     let last_block_add = Date.now() + 5000
     let difficulty = 0
     
@@ -77,46 +79,31 @@ function new_game() {
     }
 
 
-    // (function update() {
-    //     if (!paused) {
-    //         character.update()
-            
-    //         block_bot.forEach(b => {
-    //             b.update()
-    //             if (check_collision(character,b)) {
-    //                 game_over = true
-
-    //             }
-    //         })
-
-    //         block_bot = block_bot.filter(b => b.pos_x > -100);
-    //         if (Date.now() - last_block_add > 1700) {
-    //             if (Math.random() > 0.5) {
-    //                 block_bot.push(new Block_bot(canvas.width, ground_pos_y));
-    //             }
-    //             last_block_add = Date.now();
-    //         }
-
-    //     }
-    //     setTimeout(update,50)
-    // })();
     (function update() {
         if (!paused) {
+            if (game_over) {
+                blocks.forEach(b=>b.stop())
+            } else {
+                
                 character.update();
 
-                block_bot.forEach(b => {
+                blocks.forEach(b => {
                     b.update();
                     if (check_collision(character, b)) {
                         game_over = true;
-                        b.attack();
+                        b.stop();
                     }
                 });
-
-                block_bot = block_bot.filter(b => b.pos_x > -100);
-                if (Date.now() - last_block_add > 1700) {
+                blocks = blocks.filter(b => b.pos_x > -100);
+                if (Date.now() - last_block_add > 1000) {
                     if (Math.random() > 0.5) {
-                        console.log("add block");
-                        block_bot.push(new Block_bot(canvas.width, ground_pos_y));
+                        if (up_bot == 0) {
+                            up_bot = Math.round(Math.random())
+                            blocks.push(new Block_bot(canvas.width, ground_pos_y));
+                        } else {
+                            up_bot = Math.round(Math.random())
+                            blocks.push(new Block_up(canvas.width, ground_pos_y));
+                        }
                     }
                     last_block_add = Date.now();
                 }
@@ -125,6 +112,7 @@ function new_game() {
                     gameWon = true;
                 }
             }
+        }
         
         setTimeout(update, 50);
     })();
@@ -147,7 +135,7 @@ function new_game() {
         //drawGroundAndBackTrees(ctx)
         character.draw_on(ctx)
 
-        for (let b of block_bot) {
+        for (let b of blocks) {
             b.draw_on(ctx)
         }
         //drawForeTrees(ctx)

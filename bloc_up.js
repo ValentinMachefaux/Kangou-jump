@@ -1,4 +1,4 @@
-function Block_bot(left,bottom) {
+function Block_up(left,bottom) {
     this.image = new Image();
     this.image.src = this.file;
     this.inner_counter = 0;
@@ -6,14 +6,14 @@ function Block_bot(left,bottom) {
     this.effective_width = (this.width * this.scale_factor) | 0;
     this.effective_height = (this.height * this.scale_factor) | 0;
     this.pos_x = left;
-    this.pos_y = bottom - this.effective_height+10;
+    this.pos_y = bottom - this.effective_height*2.2;
     this.speed = 8;
     this.stopped = false;
     this.attacking = false
 }
 
-Block_bot.prototype = {
-    file: 'assets/block_bot.png',
+Block_up.prototype = {
+    file: 'assets/block_up.png',
     width: 50,
     height: 50,
     scale_factor: 1,

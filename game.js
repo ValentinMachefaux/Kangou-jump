@@ -22,6 +22,31 @@ function new_game() {
 
     let last_block_add = Date.now() + 5000
     let difficulty = 0
+    let ennemies_max;
+    let token_point = 0
+
+    switch (difficulty) {
+        case 1:
+            ennemies_max = 10
+            break;
+        case 2:
+            ennemies_max = 20
+            break;
+        case 3:
+            ennemies_max = 30
+            break;
+        case 4:
+            ennemies_max = 40
+            break;
+        case 5:
+            ennemies_max = 50
+            break;
+        default:
+            ennemies_max = 5
+            break;
+    }
+
+    // Score function
 
     let key_pressed = {}
 
@@ -71,6 +96,7 @@ function new_game() {
     }
     document.addEventListener("keyup", key_up_listener);
 
+    // Check les collisions
     function check_collision(first, second) {
         let rect1 = first.collision_rect(),
             rect2 = second.collision_rect();
@@ -85,35 +111,45 @@ function new_game() {
 
     (function update() {
         if (!paused) {
-            if (game_over) {
+            if (game_over || win) {
                 blocks.forEach(b => b.stop())
             } else {
-
                 character.update();
 
                 blocks.forEach(b => {
                     b.update();
                     if (check_collision(character, b)) {
-                        game_over = true;
-                        b.stop();
+                        if (b.name == "Flag") {
+                            console.log("Win");
+                            win = true
+                            b.stop()
+                        } else {
+                            console.log("Lost");
+                            game_over = true;
+                            b.stop();
+                        }
                     }
                 });
                 blocks = blocks.filter(b => b.pos_x > -100);
                 if (Date.now() - last_block_add > 1000) {
                     if (Math.random() > 0.5) {
-                        if (up_bot == 0) {
-                            up_bot = Math.round(Math.random())
-                            blocks.push(new Block_bot(canvas.width, ground_pos_y));
-                        } else {
-                            up_bot = Math.round(Math.random())
-                            blocks.push(new Block_up(canvas.width, ground_pos_y));
+                        // idée: changer le max point en fonction de la difficulté et adapter le spawn d'ennemis
+                        if (token_point < ennemies_max) {
+                            if (up_bot == 0) {
+                                up_bot = Math.round(Math.random())
+                                blocks.push(new Block_bot(canvas.width, ground_pos_y));
+                                token_point += 1
+                            } else {
+                                up_bot = Math.round(Math.random())
+                                blocks.push(new Block_up(canvas.width, ground_pos_y));
+                                token_point += 1
+                            }
+                        } else if (token_point <= ennemies_max) {
+                            console.log(blocks);
+                            blocks.push(new Flag(canvas.width, ground_pos_y - 27));
                         }
                     }
                     last_block_add = Date.now();
-                }
-
-                if (difficulty >= 1) {
-                    gameWon = true;
                 }
             }
         }
@@ -124,9 +160,6 @@ function new_game() {
     (function update_background() {
         if (!game_over && !win && !paused) {
             update_background_x();
-            if (difficulty < 1) {
-                difficulty += 0.0001;
-            }
         }
         setTimeout(update_background, 20);
     })();
@@ -134,13 +167,26 @@ function new_game() {
     (function draw() {
         ctx.fillStyle = "#8110dc"
         ctx.fillRect(0, 0, canvas.width, canvas.height)
+        
+        switch (difficulty) {
+            case 1:
+                draw_backgroundrees(ctx, 2.5)
+                break;
 
-        draw_backgroundrees(ctx)
-        character.draw_on(ctx)
+            case 2:
+                draw_backgroundrees(ctx, 5)
+                break;
 
-        for (let b of blocks) {
-            b.draw_on(ctx)
+            default:
+                draw_backgroundrees(ctx, 1.5)
+                for (let b of blocks) {
+                    b.draw_on(ctx)
+                }
+                break;
         }
+        character.draw_on(ctx)
+            
+
         ctx.fillStyle = 'white';
 
 

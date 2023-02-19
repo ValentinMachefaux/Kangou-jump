@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Runner</title>
+  <link href="edit-style.css" rel="stylesheet">
+  <link href="menu-style.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+</head>
+
+<!--POP UP-->
+<div id="pop-up">
+  Presser une touche du clavier
+</div>
+
+<!-- AUDIO -->
+<audio id="myAudio" src="assets/music/Royalty.mp3" loop></audio>
+
+<body>
+  <div id="interface">
+    <div id="before_game">
+      <p> Appuyez sur une touche pour commencer le jeu</p>
+    </div>
+    <div id="mainmenu">
+      <h1>Kangou Runner</h1>
+      <div class="displaymenu">
+        <button id="buttonstart" autofocus>Jouer</button>
+        <button id="bouttonedition">éditer niveau</button>
+        <button id="buttonoption">Paramètres</button>
+      </div>
+    </div>
+
+    <div id="menuMode">
+      <h1>Kangou Runner</h1>
+      <div class="displaymenu">
+        <button id="buttonadventure">Mode aventure</button>
+        <button id="buttonimport">importer niveau</button>
+        <button id="mainRetour1">retour</button>
+      </div>
+    </div>
+
+    <div id="menuOption">
+      <h1>Paramètres</h1>
+      <div class="displaymenu">
+
+        <div class="setting-container">
+          <p class="text">Son</p>
+          <button id="buttonsound">
+            <span id="sound-on-off" class="material-icons">volume_up</span>
+          </button>
+        </div>
+
+        <div class="setting-container">
+          <p class="text">Thème</p>
+          <button id="buttonDarkMode">
+            <span class="material-icons">dark_mode</span>
+          </button>
+        </div>
+
+        <button id="buttontouch">Commandes</button>
+
+        <button id="mainRetour2">retour</button>
+      </div>
+    </div>
+
+    <!--ASSIGNATION MENU-->
+    <div id="menuTouche">
+      <h1>Commandes</h1>
+      <div class="displaycommand">
+
+        <div class="setting-container">
+          <p class="text">Débuter la partie</p>
+          <button id="kbStartGame">G</button>
+        </div>
+
+        <div class="setting-container">
+          <p class="text">Sauter</p>
+          <button id="kbJump">I</button>
+        </div>
+
+        <div class="setting-container">
+          <p class="text">S'accroupir</p>
+          <button id="kbSneak">K</button>
+        </div>
+
+        <div class="setting-container">
+          <p class="text">Mettre en pause</p>
+          <button id="kbPause">P</button>
+        </div>
+
+        <div class="setting-container">
+          <p class="text">Reprendre</p>
+          <button id="kbResume">P</button>
+        </div>
+
+        <div class="setting-container">
+          <p class="text">Recommencer</p>
+          <button id="kbRestart">R</button>
+        </div>
+
+        <div class="setting-container">
+          <p class="text">Quitter le niveau</p>
+          <button id="kbQuitLevel">Q</button>
+        </div>
+
+        <button id="retourOption">retour</button>
+      </div>
+    </div>
+
+    <div id="menuNiveau">
+      <h1>Sélectionner du niveau</h1>
+      <div class="displaymenu">
+        <button id="niveau1">Découverte</button>
+
+        <button id="niveau2">Normal</button>
+
+        <button id="niveau3">Perfectionnement</button>
+
+        <button id="niveau4">Expertise</button>
+
+        <button id="niveau5">Maîtrise</button>
+
+        <button id="playRetour1">retour</button>
+      </div>
+    </div>
+
+    <!-- IMPORTER -->
+    <div id="menuImport">
+      <h1>Importer niveau</h1>
+      <div class="displaymenu">
+        <div id="dropBox">
+          <p>Ajoutez votre fichier ici</p>
+          <button id="playRetour2">retour</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="menuedition">
+      <div class="displayedit">
+        <section id="editLevel">
+          <div id="container"></div>
+          <div id="screen"></div>
+          <div id="recap"></div>
+        </section>
+      </div>
+    </div>
+
+    <!--IN GAME-->
+    <!-- <button id="buttonpause" >Pause</button> -->
+    <div id="menuPause">
+      <div class="displaymenu">
+        <button id="resume" autofocus>Reprendre</button>
+        <button id="restart">Recommencer</button>
+        <button id="quitLevel">Quitter le niveau</button>
+      </div>
+    </div>
+
+    <!--MENU FIN-->
+    <div id="menuFin">
+      <div class="displaymenu">
+        <h2>ton score est de (<!--Metrre score ici-->)!</h2>
+        <button id="next">Continuer</button>
+        <button id="restart">Recommencer</button>
+        <button id="quit" autofocus>Quitter</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script src="audio.js"></script>
+<script src="menu-script.js"></script>
+<script src="edit-script.js"></script>
+<script src="edit-validate.js"></script>
+<script src="edit-level-import.js"></script>
+
+</html>

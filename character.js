@@ -110,7 +110,6 @@ Character.prototype = {
                     }
                 } else {
 
-                    //this.roll_freeze_frame = 1
                     while (this.frames.length > 12) {
                         this.frames.pop()
                         this.height = 75

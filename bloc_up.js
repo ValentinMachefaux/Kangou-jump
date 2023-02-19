@@ -1,4 +1,5 @@
 function Block_up(left,bottom) {
+    this.name = "Block_up"
     this.image = new Image();
     this.image.src = this.file;
     this.inner_counter = 0;
@@ -13,7 +14,7 @@ function Block_up(left,bottom) {
 }
 
 Block_up.prototype = {
-    file: 'assets/block_up.png',
+    file: 'assets/images/block_up.png',
     width: 50,
     height: 50,
     scale_factor: 1,

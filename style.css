@@ -1,14 +1,6 @@
-body,html{
-    margin: 0;
-    height: 100%;
-}
-
-body{
-    display: grid;
-}
-
 #game_screen{
-    margin: auto;
+    margin: auto ;
+    margin-top: 150px;
     text-align: center;
 }
 

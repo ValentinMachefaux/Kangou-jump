@@ -1,5 +1,5 @@
-function Block_bot(left,bottom) {
-    this.name = "Block_bot"
+function Flag(left,bottom) {
+    this.name = "Flag"
     this.image = new Image();
     this.image.src = this.file;
     this.inner_counter = 0;
@@ -13,10 +13,10 @@ function Block_bot(left,bottom) {
     this.attacking = false
 }
 
-Block_bot.prototype = {
-    file: 'assets/images/block_bot.png',
-    width: 50,
-    height: 50,
+Flag.prototype = {
+    file: 'assets/images/flag.png',
+    width: 120,
+    height: 248,
     scale_factor: 1,
     frames: [
         { top: 0, left: 0 },

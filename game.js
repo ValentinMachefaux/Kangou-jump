@@ -2,33 +2,33 @@ let canvas = document.createElement("canvas")
 let ctx = canvas.getContext("2d")
 
 canvas.width = 800
-canvas.height = 500
+canvas.height = 512
 
-const ground_height = 30
 
-let game_screen = document.getElementById("game_screen")
-game_screen.insertBefore(canvas,game_screen.children[0])
+let container = document.getElementById('game_screen');
+container.insertBefore(canvas, container.children[0]);
+
 
 function new_game() {
     let win = false
     let paused = false
     let game_over = false
-    
+
     const ground_pos_y = canvas.height - ground_height
-    
-    let character = new Character(100,ground_pos_y)
+
+    let character = new Character(100, ground_pos_y)
     let blocks = []
     let up_bot = Math.round(Math.random())
 
     let last_block_add = Date.now() + 5000
     let difficulty = 0
-    
+
     let key_pressed = {}
 
     function key_down_listener(e) {
         // Supprime la repetition auto des touches
         if (key_pressed[e.keyCode]) {
-            return 
+            return
         }
 
         key_pressed[e.keyCode] = true
@@ -38,12 +38,16 @@ function new_game() {
                 case 32: // barre espace
                     character.start_jump()
                     break;
-                    
+
                 case 38: // touche flechee haut
-                    character.start_jump()
+                    if (!character.jumping) {
+                        character.start_jump()
+                    }
                     break;
                 case 40: // touche flechee bas
-                    character.start_roll()
+                    if (!character.rolling) {
+                        character.start_roll()
+                    }
                     break;
                 case 27: // touche echap
                     paused = !paused
@@ -55,7 +59,7 @@ function new_game() {
     document.addEventListener("keydown", key_down_listener);
 
     function key_up_listener(e) {
-        
+
         key_pressed[e.keyCode] = false
 
         if (e.keyCode == 32 || e.keyCode == 38) {
@@ -73,18 +77,18 @@ function new_game() {
 
         // https://developer.mozilla.org/kab/docs/Games/Techniques/2D_collision_detection#Axis-Aligned_Bounding_Box
         return rect1.x < rect2.x + rect2.width &&
-               rect1.x + rect1.width > rect2.x &&
-               rect1.y < rect2.y + rect2.height &&
-               rect1.height + rect1.y > rect2.y;
+            rect1.x + rect1.width > rect2.x &&
+            rect1.y < rect2.y + rect2.height &&
+            rect1.height + rect1.y > rect2.y;
     }
 
 
     (function update() {
         if (!paused) {
             if (game_over) {
-                blocks.forEach(b=>b.stop())
+                blocks.forEach(b => b.stop())
             } else {
-                
+
                 character.update();
 
                 blocks.forEach(b => {
@@ -113,46 +117,43 @@ function new_game() {
                 }
             }
         }
-        
-        setTimeout(update, 50);
+
+        setTimeout(update, 60);
     })();
 
-    // (function updateBackground() {
-    //     if (!game_over && !win && !paused) {
-    //         updateGroundAndBackTrees(difficulty)
-    //         updateForeTrees(difficulty)
-    //         if (difficulty < 1) {
-    //             difficulty += 0.0001
-    //         }
-    //     }
-    //     setTimeout(updateBackground,20)
-    // })();
+    (function update_background() {
+        if (!game_over && !win && !paused) {
+            update_background_x();
+            if (difficulty < 1) {
+                difficulty += 0.0001;
+            }
+        }
+        setTimeout(update_background, 20);
+    })();
 
     (function draw() {
-        ctx.fillStyle = '#81738e';
-        ctx.fillRect(0,0,canvas.width,canvas.height)
+        ctx.fillStyle = "#8110dc"
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-        //drawGroundAndBackTrees(ctx)
+        draw_backgroundrees(ctx)
         character.draw_on(ctx)
 
         for (let b of blocks) {
             b.draw_on(ctx)
         }
-        //drawForeTrees(ctx)
         ctx.fillStyle = 'white';
 
 
-        setTimeout(draw, 1000/60)
+        setTimeout(draw, 1000 / 60)
     })();
 }
-
 (function check_loaded() {
     if (document.readyState === "complete") {
-        //prepareBackground(canvas.width,canvas.height)
-        //prepareTrees()
+        //startGame();
+        prep_background(canvas.width, canvas.height);
         new_game()
     } else {
-        setTimeout(check_loaded,100)
+        setTimeout(check_loaded, 100)
     }
 })()
 

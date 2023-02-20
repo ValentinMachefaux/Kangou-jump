@@ -17,9 +17,8 @@ buttonsound.addEventListener('click', function () {
     }
 })
 
-let buttonSound = new Audio("assets/sound_effects/Crystal_Touch_2.mp3");
+let buttonSound = new Audio("assets/sound_effects/Crystal_Touch_0.mp3");
 document.addEventListener('click', function () {
-    //buttonSound.play()
-    buttonsound.volume = 0.01
-
+    buttonSound.play()
 })
+

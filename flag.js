@@ -36,10 +36,10 @@ Flag.prototype = {
             }
         }
     },
-    draw_on: function(ctx) {
+    draw_on: function(ctx, difficulty) {
         let frame = this.frames[this.current_frame];
-        ctx.drawImage(this.image, frame.left, frame.top, this.width, this.height, this.pos_x | 0, this.pos_y | 0, this.effective_width, this.effective_height);
-        // console.log('ennemie Y',this.pos_y, '\nennemie X', this.pos_x);
+        this.speed = difficulty;
+        ctx.drawImage(this.image, frame.left, frame.top, this.width, this.height, this.pos_x | 0, this.pos_y | 0, this.effective_width, this.effective_height);        // console.log('ennemie Y',this.pos_y, '\nennemie X', this.pos_x);
     },
     collision_rect: function() {
         return {

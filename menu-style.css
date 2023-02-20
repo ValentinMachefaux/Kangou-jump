@@ -326,6 +326,7 @@ button:hover,
 #game_screen {
   margin: auto;
   text-align: center;
+  display: none;
 }
 
 canvas {

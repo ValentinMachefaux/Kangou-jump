@@ -3,38 +3,38 @@
 }
 
 .floor {
-    background-image: url("Images/floor.png");
+    background-image: url("assets/images/floor.png");
 }
 
 .char {
-    background-image: url("Images/chara_up.png");
+    background-image: url("assets/images/chara_up.png");
 }
 
 .char2 {
-    background-image: url("Images/chara_down.png");
+    background-image: url("assets/images/chara_down.png");
 
 }
 
 .finish {
-    background-image: url("Images/floor_finish.png");
+    background-image: url("assets/images/floor_finish.png");
 }
 
 .finish2 {
-    background-image: url("Images/flag_down.png");
+    background-image: url("assets/images/flag_down.png");
 
 }
 
 .finish3 {
-    background-image: url("Images/flag_up.png");
+    background-image: url("assets/images/flag_up.png");
 
 }
 
 .up {
-    background-image: url("Images/raven.2.png");
+    background-image: url("assets/images/raven.2.png");
 }
 
 .mid {
-    background-image: url("Images/Wild54151.png");
+    background-image: url("assets/images/Wild54151.png");
 }
 
 .down {
@@ -46,15 +46,15 @@
 }
 
 .terra {
-    background-image: url("Images/icon_shovel_terra.png");
+    background-image: url("assets/images/icon_shovel_terra.png");
 }
 
 .speed {
-    background-image: url("Images/Speed_1.png");
+    background-image: url("assets/images/Speed_1.png");
 }
 
 .multi {
-    background-image: url("Images/x2.png");
+    background-image: url("assets/images/x2.png");
 }
 
 .shield {
@@ -88,7 +88,7 @@
     flex-flow: column nowrap;
     height: 600px;
     width: 300px;
-    background-image: url("Images/old_paper.png");
+    background-image: url("assets/images/old_paper.png");
     margin-bottom: 10px;
     padding-left: 4px;
     align-items: center;

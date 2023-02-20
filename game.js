@@ -1,19 +1,40 @@
 let canvas = document.createElement("canvas")
 let ctx = canvas.getContext("2d")
-
 canvas.width = 800
 canvas.height = 512
 
+let game_screen = document.getElementById('game_screen');
+game_screen.insertBefore(canvas, game_screen.children[0]);
+let get_canvas = document.querySelector('canvas')
 
-let container = document.getElementById('game_screen');
-container.insertBefore(canvas, container.children[0]);
+let difficulty;
+let counter = 0;
+let paused = true
+let score_display = document.querySelector(".score_display");
+let menu_difficulty = document.getElementById("difficulty")
 
+menu_difficulty.addEventListener("click", (e) => {
+    difficulty = e.target.value
+    //new_game()
+    // check_loaded()
+})
+let interval = setInterval( function(){
+    if (!paused) {
+        counter++
+        score_display.innerHTML = `Score: ${counter}`;
+    }
+},1000);
+function clear_score() {
+    counter = 0
+    clearInterval(interval)
+}
+// score()
 
 function new_game() {
     let win = false
-    let paused = false
     let game_over = false
-
+    let restart = false
+    paused=false
     const ground_pos_y = canvas.height - ground_height
 
     let character = new Character(100, ground_pos_y)
@@ -21,7 +42,7 @@ function new_game() {
     let up_bot = Math.round(Math.random())
 
     let last_block_add = Date.now() + 5000
-    let difficulty = 0
+
     let ennemies_max;
     let token_point = 0
 
@@ -48,51 +69,93 @@ function new_game() {
 
     // Score function
 
-    let key_pressed = {}
+
+    // let key_pressed = {}
+
+    function restartGame() {
+        blocks = [];
+        character.restart();
+        last_block_add = Date.now();
+        game_over = false;
+        win = false;
+        restart = false;
+        token_point = 0
+        clear_score()
+        score_display.innerHTML = `Score: 0`;
+        interval = setInterval( function(){
+            if (!paused) {
+                counter++
+                score_display.innerHTML = `Score: ${counter}`;
+            }
+        },1000);
+            }
 
     function key_down_listener(e) {
-        // Supprime la repetition auto des touches
-        if (key_pressed[e.keyCode]) {
-            return
+        // if (key_pressed[e.keyCode]) {
+        //     return
+        // }
+
+        key = e.key.toUpperCase()
+
+        if (key == kbJump.innerHTML.toUpperCase()) {
+            character.start_jump()
+        }
+        if (key == kbSneak.innerHTML.toUpperCase()) {
+            character.start_roll()
+        }
+        if (key == kbPause.innerHTML.toUpperCase()) {
+            paused = !paused
         }
 
-        key_pressed[e.keyCode] = true
+        //Supprime la repetition auto des touches
+        // key_pressed[e.keyCode] = true
 
-        if (!game_over && !win) {
-            switch (e.keyCode) {
-                case 32: // barre espace
-                    character.start_jump()
-                    break;
+        // if (!game_over && !win) {
+        //     switch (e.keyCode) {
+        //         case 32: // barre espace
+        //             break;
 
-                case 38: // touche flechee haut
-                    if (!character.jumping) {
-                        character.start_jump()
-                    }
-                    break;
-                case 40: // touche flechee bas
-                    if (!character.rolling) {
-                        character.start_roll()
-                    }
-                    break;
-                case 27: // touche echap
-                    paused = !paused
-                    console.log("pause");
-                    break;
-            }
-        }
+        //         case 38: // touche flechee haut
+        //             if (!character.jumping) {
+        //                 character.start_jump()
+        //             }
+        //             break;
+        //         case 40: // touche flechee bas
+        //             if (!character.rolling) {
+        //                 character.start_roll()
+        //             }
+        //             break;
+        //         case 27: // touche echap
+        //             paused = !paused
+        //             console.log("pause");
+        //             break;
+        //     }
+        // }
+
+        // character.start_jump()
     }
     document.addEventListener("keydown", key_down_listener);
 
     function key_up_listener(e) {
+        // key_pressed[e.keyCode] = false
 
-        key_pressed[e.keyCode] = false
+        key = e.key.toUpperCase()
 
-        if (e.keyCode == 32 || e.keyCode == 38) {
+        if (key == kbJump.innerHTML) {
             character.end_jump()
         }
-        if (e.keyCode == 40) {
+        if (key == kbSneak.innerHTML) {
             character.end_roll()
         }
+
+
+
+        // if (e.keyCode == 32 || e.keyCode == 38) {
+        //     character.end_jump()
+        // }
+        // if (e.keyCode == 40) {
+        //     character.end_roll()
+        // }
     }
     document.addEventListener("keyup", key_up_listener);
 
@@ -111,8 +174,23 @@ function new_game() {
 
     (function update() {
         if (!paused) {
-            if (game_over || win) {
-                blocks.forEach(b => b.stop())
+            if (restart) {
+                blocks.forEach(b => b.update());
+
+            } else if (win) {
+                alert("Bravo ! \nC'est bien Capy-boy !")
+
+                restart = true;
+                blocks.forEach(b => b.stop());
+                restartGame();
+
+            } else if (game_over) {
+                alert("Perdu ! \nT'es mauvais Capy-boy :'(")
+
+                restart = true;
+                blocks.forEach(b => b.stop());
+                restartGame();
+
             } else {
                 character.update();
 
@@ -131,7 +209,7 @@ function new_game() {
                     }
                 });
                 blocks = blocks.filter(b => b.pos_x > -100);
-                if (Date.now() - last_block_add > 1000) {
+                if (Date.now() - last_block_add > 1500) {
                     if (Math.random() > 0.5) {
                         // idée: changer le max point en fonction de la difficulté et adapter le spawn d'ennemis
                         if (token_point < ennemies_max) {
@@ -145,7 +223,6 @@ function new_game() {
                                 token_point += 1
                             }
                         } else if (token_point <= ennemies_max) {
-                            console.log(blocks);
                             blocks.push(new Flag(canvas.width, ground_pos_y - 27));
                         }
                     }
@@ -154,9 +231,10 @@ function new_game() {
             }
         }
 
+        
         setTimeout(update, 60);
     })();
-
+        
     (function update_background() {
         if (!game_over && !win && !paused) {
             update_background_x();
@@ -167,39 +245,58 @@ function new_game() {
     (function draw() {
         ctx.fillStyle = "#8110dc"
         ctx.fillRect(0, 0, canvas.width, canvas.height)
-        
+
         switch (difficulty) {
-            case 1:
-                draw_backgroundrees(ctx, 2.5)
+            case "1":
+                draw_backgroundrees(ctx, 3.5)
+                for (let b of blocks) {
+                    b.draw_on(ctx, 16)
+                }
                 break;
-
-            case 2:
-                draw_backgroundrees(ctx, 5)
+            case "2":
+                draw_backgroundrees(ctx, 5.5)
+                for (let b of blocks) {
+                    b.draw_on(ctx, 20)
+                }
                 break;
-
+            case "3":
+                draw_backgroundrees(ctx, 7.5)
+                for (let b of blocks) {
+                    b.draw_on(ctx, 24)
+                }
+                break;
+            case "4":
+                draw_backgroundrees(ctx, 10)
+                for (let b of blocks) {
+                    b.draw_on(ctx, 28)
+                }
+                break;
             default:
                 draw_backgroundrees(ctx, 1.5)
                 for (let b of blocks) {
-                    b.draw_on(ctx)
+                    b.draw_on(ctx, 8)
                 }
                 break;
         }
-        character.draw_on(ctx)
-            
+        character.draw_on(ctx);
 
         ctx.fillStyle = 'white';
 
-
+        // setTimeout(draw, 0.1)
         setTimeout(draw, 1000 / 60)
     })();
 }
-(function check_loaded() {
+function check_loaded() {
     if (document.readyState === "complete") {
         //startGame();
+        document.getElementById("interface").style.display = "none"
+        game_screen.style.display = "block"
+
         prep_background(canvas.width, canvas.height);
         new_game()
     } else {
         setTimeout(check_loaded, 100)
     }
-})()
+}
+// check_loaded()
 

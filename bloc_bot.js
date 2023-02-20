@@ -1,4 +1,4 @@
-function Block_bot(left,bottom) {
+function Block_bot(left, bottom) {
     this.name = "Block_bot"
     this.image = new Image();
     this.image.src = this.file;
@@ -7,7 +7,7 @@ function Block_bot(left,bottom) {
     this.effective_width = (this.width * this.scale_factor) | 0;
     this.effective_height = (this.height * this.scale_factor) | 0;
     this.pos_x = left;
-    this.pos_y = bottom - this.effective_height+10;
+    this.pos_y = bottom - this.effective_height + 10;
     this.speed = 8;
     this.stopped = false;
     this.attacking = false
@@ -21,7 +21,7 @@ Block_bot.prototype = {
     frames: [
         { top: 0, left: 0 },
     ],
-    update: function() {
+    update: function () {
         if (!this.stopped) {
             this.inner_counter += 1;
             if (this.inner_counter % 2 == 0) {
@@ -36,12 +36,12 @@ Block_bot.prototype = {
             }
         }
     },
-    draw_on: function(ctx) {
+    draw_on: function (ctx, difficulty) {
         let frame = this.frames[this.current_frame];
-        ctx.drawImage(this.image, frame.left, frame.top, this.width, this.height, this.pos_x | 0, this.pos_y | 0, this.effective_width, this.effective_height);
-        // console.log('ennemie Y',this.pos_y, '\nennemie X', this.pos_x);
+        this.speed = difficulty;
+        ctx.drawImage(this.image, frame.left, frame.top, this.width, this.height, this.pos_x | 0, this.pos_y | 0, this.effective_width, this.effective_height);        // console.log('ennemie Y',this.pos_y, '\nennemie X', this.pos_x);
     },
-    collision_rect: function() {
+    collision_rect: function () {
         return {
             x: this.pos_x | 0,
             y: this.pos_y | 0,
@@ -49,7 +49,7 @@ Block_bot.prototype = {
             height: this.effective_height
         };
     },
-    stop: function() {
+    stop: function () {
         this.stopped = true;
     }
 }
